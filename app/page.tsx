@@ -40,7 +40,7 @@ function Particles() {
 // Music Player Component
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     audioRef.current = new Audio('/music/11.mp3');
@@ -79,9 +79,9 @@ function MusicPlayer() {
 }
 
 // Lightbox Component
-function Lightbox({ imageIndex, onClose, onPrev, onNext }) {
+function Lightbox({ imageIndex, onClose, onPrev, onNext }: { imageIndex: number; onClose: () => void; onPrev: () => void; onNext: () => void }) {
   useEffect(() => {
-    const handleKey = (e) => {
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') onPrev();
       if (e.key === 'ArrowRight') onNext();
@@ -124,15 +124,15 @@ function Lightbox({ imageIndex, onClose, onPrev, onNext }) {
 
 // Gallery Section
 function Gallery() {
-  const [lightboxIndex, setLightboxIndex] = useState(null);
+ const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const openLightbox = (index) => setLightboxIndex(index);
+  const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
   const prevImage = useCallback(() => {
-    setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setLightboxIndex((prev) => (prev === null ? 0 : prev === 0 ? images.length - 1 : prev - 1));
   }, []);
   const nextImage = useCallback(() => {
-    setLightboxIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setLightboxIndex((prev) => (prev === null ? 0 : prev === images.length - 1 ? 0 : prev + 1));
   }, []);
 
   return (
@@ -166,7 +166,7 @@ function Gallery() {
 
 // Letter Section with scroll reveal
 function LetterSection() {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
